@@ -2,7 +2,7 @@
 
 # Short Python code to determine the relative occultation depths from both reflected and emitted lights, in parts per million.
 # The code requires user input of stellar effective temperature, stellar radius, planetary radius, orbital semi-major axis, a wavelength range, and a few albedo choices.
-# A plot is created, turning on the relevant option will save this figure. All parts of the script can be tuned as needed.
+# A plot is created, turning on the relevant option will save this figure. All parts of the script can be tuned and edited as needed.
 # 
 # by Adam Stevenson, inspired by code from Amaury Triaud
 # last modified 31/7/2026
@@ -11,6 +11,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
 import sys
 
 
@@ -20,7 +21,11 @@ teff = 3000
 rp = 9.58
 rstar=0.23
 sma=0.026
-wl = np.arange(0.6e-6, 5.30e-6, 1e-9) # e.g. NIRSPEC PRISM
+
+## to do sometime: include uncertainties and propagate chains. Uncertainties typically small.
+
+
+wl = np.arange(0.6e-6, 5.30e-6, 1e-9) #wavelength range of an instrument, e.g. NIRSPEC PRISM
 
 # define if albedo is known or not
 # if unknown, the figure will have three panels. if known, there will only be a single albedo choice and one panel in the figure.
@@ -38,8 +43,14 @@ targ_name = 'Target'
 # to save the figure created
 save_figure = True
 
+# to save the arrays out to use for other purposes
+save_arrays = True
+
 
 # ---------------------- END OF INPUTS ------------------------------
+
+#--------------------------------------------------------------------
+#--------------------------------------------------------------------
 
 
 def main():
@@ -79,12 +90,24 @@ def main():
         ax[2].set_title(f'Albedo={albedo[2]}')
 
         fig.suptitle(f'{targ_name}',fontsize=15)
-        fig.supxlabel(r'Wavelength [$\mu$m]',fontsize=15)
+        fig.supxlabel(r'Wavelength [${\rm \mu}$m]',fontsize=15)
         fig.supylabel('Occultation depth [ppm]',fontsize=15)
         fig.tight_layout();
+
         if save_figure==True:
             plt.savefig(f'occulation_depths_{targ_name}.pdf',bbox_inches='tight')
+
+        if save_arrays==True:
+            out_df1 = pd.DataFrame({'reflection_BB':occult1[0], 'emission_BB':occult1[1], 'reflection_depth':occult1[2], 'emission_depth':occult1[3]})
+            out_df2 = pd.DataFrame({'reflection_BB':occult2[0], 'emission_BB':occult2[1], 'reflection_depth':occult2[2], 'emission_depth':occult2[3]})
+            out_df3 = pd.DataFrame({'reflection_BB':occult3[0], 'emission_BB':occult3[1], 'reflection_depth':occult3[2], 'emission_depth':occult3[3]})
+
+            out_df1.to_csv(f'{targ_name}_{albedo[0]}_generated_data.csv')
+            out_df2.to_csv(f'{targ_name}_{albedo[1]}_generated_data.csv')
+            out_df3.to_csv(f'{targ_name}_{albedo[2]}_generated_data.csv')
+
         plt.show()
+
 
     elif len(albedo)==1:
         fig,ax=plt.subplots(nrows=1,ncols=1,figsize=(4,5))
@@ -102,16 +125,23 @@ def main():
         ax.set_title(f'Albedo={albedo[0]}')
 
         fig.suptitle(f'{targ_name}',fontsize=15)
-        fig.supxlabel(r'Wavelength [$\mu$m]',fontsize=15)
+        fig.supxlabel(r'Wavelength [${\rm \mu}$m]',fontsize=15)
         fig.supylabel('Occultation depth [ppm]',fontsize=15)
         fig.tight_layout()
         if save_figure==True:
             plt.savefig(f'occulation_depths_{targ_name}.pdf',bbox_inches='tight')
+
+        if save_arrays==True:
+            out_df1 = pd.DataFrame({'reflection_BB':occult[0], 'emission_BB':occult[1], 'reflection_depth_ppm':occult[2], 'emission_depth_ppm':occult[3]})
+            out_df1.to_csv(f'{targ_name}_{albedo[0]}_generated_data.csv')
+
         plt.show()
+
     else:
         # 1x3 plot is fine, could iterate over whatever number of albedo inputs but too many options is overkill. 
         print('Wrong number of albedo inputs, cancelling for now')
         sys.exit()
+
 
 # ----------------------  END OF MAIN ------------------------------
 
@@ -180,7 +210,7 @@ def planck_wave(temp, wave_array):
     Calculate the spectral radiance Planck function for a given wavelength range
     
     Inputs:
-    temp = temperature of the object, be it star or planet
+    temp = temperature of the celestial body, be it star or planet
     wave_array = wavelength grid over which to sample the planck function, e.g. np.arange(0.5e-6, 10e-6, 1e-9)
 
     """
@@ -197,6 +227,8 @@ def planck_wave(temp, wave_array):
 
 # ----------------------  END OF FUNCTIONS ------------------------------
 
+#------------------------------------------------------------------------
+#------------------------------------------------------------------------
 
 
 if __name__ == "__main__":
