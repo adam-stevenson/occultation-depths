@@ -39,7 +39,7 @@ targ_name = 'Target'
 save_figure = True
 
 
-# ----------------------  END OF INPUTS ------------------------------
+# ---------------------- END OF INPUTS ------------------------------
 
 
 def main():
@@ -49,18 +49,21 @@ def main():
         occult1=reflected_emitted(teff,rp,rstar,sma,wl,albedo[0])
         ax[0].plot(wl*1e6,occult1[2],label='Reflected',c='dodgerblue',linewidth=3)
         ax[0].plot(wl*1e6,occult1[3],label='Emitted',c='darkred',linewidth=3)
+        ax[0].plot(wl*1e6,occult1[2]+occult1[3],label='Total',c='k',linewidth=2,linestyle='--')
         ax[0].set_yscale('log')
         ax[0].legend(loc='best')
 
         occult2=reflected_emitted(teff,rp,rstar,sma,wl,albedo[1])
         ax[1].plot(wl*1e6,occult2[2],label='Reflected',c='dodgerblue',linewidth=3)
         ax[1].plot(wl*1e6,occult2[3],label='Emitted',c='darkred',linewidth=3)
+        ax[1].plot(wl*1e6,occult2[2]+occult2[3],label='Total',c='k',linewidth=2,linestyle='--')
         ax[1].set_yscale('log')
         ax[1].legend(loc='best')
 
         occult3=reflected_emitted(teff,rp,rstar,sma,wl,albedo[2])
         ax[2].plot(wl*1e6,occult3[2],label='Reflected',c='dodgerblue',linewidth=3)
         ax[2].plot(wl*1e6,occult3[3],label='Emitted',c='darkred',linewidth=3)
+        ax[2].plot(wl*1e6,occult3[2]+occult3[3],label='Total',c='k',linewidth=2,linestyle='--')
         ax[2].set_yscale('log')
         ax[2].legend(loc='best')
 
@@ -89,6 +92,7 @@ def main():
         occult=reflected_emitted(teff,rp,rstar,sma,wl,albedo[0])
         ax.plot(wl*1e6,occult[2],label='Reflected',c='dodgerblue',linewidth=3)
         ax.plot(wl*1e6,occult[3],label='Emitted',c='darkred',linewidth=3)
+        ax.plot(wl*1e6,occult[2]+occult[3],label='Total',c='k',linewidth=2,linestyle='--')
         ax.set_yscale('log')
         ax.legend(loc='best')
 
@@ -136,6 +140,7 @@ def reflected_emitted(teff,rp,rstar,sma,wave_array=np.arange(0.6e-6, 5.30e-6, 1e
 
     """
 
+    # SI conversions, from astropy.constants
     Rearth = 6378100.0
     Rsun = 695700000.0
     au = 149597870700.0
@@ -191,7 +196,6 @@ def planck_wave(temp, wave_array):
     return B
 
 # ----------------------  END OF FUNCTIONS ------------------------------
-
 
 
 
