@@ -80,9 +80,9 @@ def main():
 
 
         # These are suitable for the current target. Feel free to modify!
-        ax[0].set_ylim(1e0,1e3)
-        ax[1].set_ylim(1e0,1e3)
-        ax[2].set_ylim(1e0,1e3)
+        ax[0].set_ylim(1e0,5e3)
+        ax[1].set_ylim(1e0,5e3)
+        ax[2].set_ylim(1e0,5e3)
 
 
         ax[0].set_title(f'Albedo={albedo[0]}')
@@ -95,7 +95,7 @@ def main():
         fig.tight_layout();
 
         if save_figure==True:
-            plt.savefig(f'occulation_depths_{targ_name}.pdf',bbox_inches='tight')
+            plt.savefig(f'occultation_depths_{targ_name}.pdf',bbox_inches='tight')
 
         if save_arrays==True:
             out_df1 = pd.DataFrame({'reflection_BB':occult1[0], 'emission_BB':occult1[1], 'reflection_depth_ppm':occult1[2], 'emission_depth_ppm':occult1[3]})
@@ -107,6 +107,26 @@ def main():
             out_df3.to_csv(f'{targ_name}_{albedo[2]}_generated_data.csv')
 
         plt.show()
+
+
+        # create a plot showing a variety of albedos on the same panel. 
+        # To see the precision on occultation depth required to differentiate
+        # between different unknown albedos from observations
+
+        cmap = plt.get_cmap('Blues_r')
+
+        for i in [0.05,0.1,0.15,0.3,0.5,0.7]:
+            occ=reflected_emitted(teff,rp,rstar,sma,wl,i)
+            plt.plot(wl*1e6,occ[2]+occ[3],label=i,c=cmap(i))
+
+        plt.legend()
+        plt.xlabel(r'Wavelength [${\rm \mu}$m]',fontsize=15)
+        plt.ylabel('Occultation depth [ppm]',fontsize=15)
+        plt.title(f'{targ_name}',fontsize=15)
+        if save_figure==True:
+            plt.savefig(f'depths_albedos_{targ_name}.pdf',bbox_inches='tight')
+        plt.show()
+        
 
 
     elif len(albedo)==1:
@@ -129,7 +149,7 @@ def main():
         fig.supylabel('Occultation depth [ppm]',fontsize=15)
         fig.tight_layout()
         if save_figure==True:
-            plt.savefig(f'occulation_depths_{targ_name}.pdf',bbox_inches='tight')
+            plt.savefig(f'occultation_depths_{targ_name}.pdf',bbox_inches='tight')
 
         if save_arrays==True:
             out_df1 = pd.DataFrame({'reflection_BB':occult[0], 'emission_BB':occult[1], 'reflection_depth_ppm':occult[2], 'emission_depth_ppm':occult[3]})
