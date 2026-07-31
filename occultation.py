@@ -98,9 +98,9 @@ def main():
             plt.savefig(f'occulation_depths_{targ_name}.pdf',bbox_inches='tight')
 
         if save_arrays==True:
-            out_df1 = pd.DataFrame({'reflection_BB':occult1[0], 'emission_BB':occult1[1], 'reflection_depth':occult1[2], 'emission_depth':occult1[3]})
-            out_df2 = pd.DataFrame({'reflection_BB':occult2[0], 'emission_BB':occult2[1], 'reflection_depth':occult2[2], 'emission_depth':occult2[3]})
-            out_df3 = pd.DataFrame({'reflection_BB':occult3[0], 'emission_BB':occult3[1], 'reflection_depth':occult3[2], 'emission_depth':occult3[3]})
+            out_df1 = pd.DataFrame({'reflection_BB':occult1[0], 'emission_BB':occult1[1], 'reflection_depth_ppm':occult1[2], 'emission_depth_ppm':occult1[3]})
+            out_df2 = pd.DataFrame({'reflection_BB':occult2[0], 'emission_BB':occult2[1], 'reflection_depth_ppm':occult2[2], 'emission_depth_ppm':occult2[3]})
+            out_df3 = pd.DataFrame({'reflection_BB':occult3[0], 'emission_BB':occult3[1], 'reflection_depth_ppm':occult3[2], 'emission_depth_ppm':occult3[3]})
 
             out_df1.to_csv(f'{targ_name}_{albedo[0]}_generated_data.csv')
             out_df2.to_csv(f'{targ_name}_{albedo[1]}_generated_data.csv')
