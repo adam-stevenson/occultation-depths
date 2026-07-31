@@ -95,7 +95,7 @@ def main():
         fig.tight_layout();
 
         if save_figure==True:
-            plt.savefig(f'occulation_depths_{targ_name}.pdf',bbox_inches='tight')
+            plt.savefig(f'occultation_depths_{targ_name}.pdf',bbox_inches='tight')
 
         if save_arrays==True:
             out_df1 = pd.DataFrame({'reflection_BB':occult1[0], 'emission_BB':occult1[1], 'reflection_depth_ppm':occult1[2], 'emission_depth_ppm':occult1[3]})
@@ -129,7 +129,7 @@ def main():
         fig.supylabel('Occultation depth [ppm]',fontsize=15)
         fig.tight_layout()
         if save_figure==True:
-            plt.savefig(f'occulation_depths_{targ_name}.pdf',bbox_inches='tight')
+            plt.savefig(f'occultation_depths_{targ_name}.pdf',bbox_inches='tight')
 
         if save_arrays==True:
             out_df1 = pd.DataFrame({'reflection_BB':occult[0], 'emission_BB':occult[1], 'reflection_depth_ppm':occult[2], 'emission_depth_ppm':occult[3]})
